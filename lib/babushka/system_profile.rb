@@ -197,7 +197,13 @@ module Babushka
 
   class ArchSystemProfile < LinuxSystemProfile
     def flavour_str; 'Arch' end
-    def pkg_helper; PacmanHelper end
+    def pkg_helper
+      if File.exists? '/usr/bin/pacaur'
+        Babushka::PacaurHelper
+      else
+        Babushka::PacmanHelper
+      end
+    end
 
     # Arch uses rolling versions and doesn't assign version numbers.
     def get_version_info; 'rolling' end
